@@ -1,0 +1,12 @@
+{
+  "name": "websocket",
+  "version": "1.0.0",
+  "description": "web socket server",
+  "main": "ws-server.js",
+  "scripts": {
+    "dev" : "node --watch backend/ws-server.js"
+  },
+  "author": "",
+  "type": "module",
+  "license": "ISC"
+}
