@@ -21,5 +21,4 @@ export default createWebSocketFrame = (message) => {
     payload.copy(frame,2);
 
     return frame;
-
 }

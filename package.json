@@ -4,9 +4,13 @@
   "description": "web socket server",
   "main": "ws-server.js",
   "scripts": {
-    "dev" : "node --watch backend/ws-server.js"
+    "dev": "node --watch backend/ws-server.js"
   },
   "author": "",
   "type": "module",
-  "license": "ISC"
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
 }

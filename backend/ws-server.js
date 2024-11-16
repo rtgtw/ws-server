@@ -1,5 +1,6 @@
 import http from 'http';
 import crpyto from 'crypto';
+import dotenv from 'dotenv'
 //Creating a websocket server from scratch
 //node.js comes w/ two modules http and crypt
 
@@ -19,11 +20,16 @@ const server = http.createServer((req,res) => {
 
 //Listen for when a client wants to upgrade to a websocket connection
 //listen for upgrade, look inside of the headers for sec-websocket-key, head is there if there are any extra headers
+//server.on means the server has a listner for when someone sends an upgrade in the request body
+//the tcp connection is the second parameter and we use that to essentially pass that to webSocket handler
+//and keep the TCP connection alive
+//This differs from an HTTP req/res because once the server responds it destroys the TCP connection (socket)
+//however with WS we are keeping the connection alive
 server.on('upgrade', (req, socket, head) => {
 
     const key = req.headers['sec-websocket-key'];
 
-    //if there is no key close the socket (aka tcp connection)
+    //if there is no key close the socket (aka tcp connection) gets destroyed
     if(!key){
         socket.write('HTTP/1.1 400 Bad Request \r\n\r\n');
         socket.destroy();
@@ -31,7 +37,7 @@ server.on('upgrade', (req, socket, head) => {
     }
 
 
-    //if its present generate an ws accept header
+    //if its present generate a ws accept header
     //key + guid
     const acceptKey = crpyto.createHash('sha1').update(key +'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
 
@@ -46,3 +52,7 @@ server.on('upgrade', (req, socket, head) => {
     //Handle Websocket communication
     handleWebSocket(socket);
 });
+
+
+
+//have the server listening on port 8080
