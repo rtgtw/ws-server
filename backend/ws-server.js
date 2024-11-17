@@ -1,6 +1,8 @@
 import http from 'http';
 import crpyto from 'crypto';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import {ENV_VARS} from './config.js';
+import handleWebSocket from './ws-handler.js'
 //Creating a websocket server from scratch
 //node.js comes w/ two modules http and crypt
 
@@ -10,7 +12,7 @@ import dotenv from 'dotenv'
     //communication w/ websocket frames where the data is sent and received
 
 
-//1. create an http server 
+// create an http server 
 const server = http.createServer((req,res) => {
     res.writeHead(400, {'Content-Type' : 'text/plain'});
     res.end('Only accepts websocket connections');
@@ -41,6 +43,8 @@ server.on('upgrade', (req, socket, head) => {
     //key + guid
     const acceptKey = crpyto.createHash('sha1').update(key +'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
 
+    console.log("entered the upgradae function, sending socket write")
+
     //send a response through the tcp connection
     socket.write(`HTTP/1.1 101 Switching Protocols\r\n` +
         `Upgrade: websocket\r\n` +
@@ -48,11 +52,13 @@ server.on('upgrade', (req, socket, head) => {
         `Sec-WebSocket-Accept: ${acceptKey}\r\n\r\n`
     );
 
-
     //Handle Websocket communication
     handleWebSocket(socket);
 });
 
 
 
-//have the server listening on port 8080
+//have the server listening on port 
+server.listen(ENV_VARS.PORT, () => {
+    console.log('Websocket server is running on ws://localhost:xxxx');
+});

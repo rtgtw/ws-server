@@ -1,6 +1,6 @@
 //generating a Websocket frame outbound for the client 
 
-export default createWebSocketFrame = (message) => {
+const createWebSocketFrame = (message) => {
 
     //create a buffer to store the payload, this will be the size of the payload aka the message
     //we specify the character encoding as well to properly create the buffer
@@ -22,3 +22,5 @@ export default createWebSocketFrame = (message) => {
 
     return frame;
 }
+
+export default createWebSocketFrame;
